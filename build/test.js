@@ -40,7 +40,7 @@ var got = require('got');
 var test = require('tape');
 // Start the app
 var env = Object.assign({}, process.env, { PORT: 5000 });
-var child = spawn('node', ['index.js'], { env: env });
+var child = spawn('node', ['index.ts'], { env: env });
 test('responds to requests', function (t) {
     t.plan(4);
     // Wait until the server is ready
