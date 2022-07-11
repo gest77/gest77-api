@@ -5,7 +5,7 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.NODE_PORT || 5000
 
-console.log( process.env.NODE_PORT)
+console.log( "dot env : " + process.env.NODE_PORT)
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
