@@ -1,9 +1,8 @@
-import { SearchInput } from "../toolsServices/searchService";
 import { SPREADSHEET_ID_INSCRITS_2021 } from "./sheetService";
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
 import { MemberSummary } from "../entities/members";
-import { buildPaginateResponse, PaginatedResponse } from "../toolsServices/searchService";
+import { SearchInput, buildPaginateResponse, PaginatedResponse } from "../toolsServices/SearchService";
 
 export type SearchMembersInput = SearchInput<SearchMembersFilter, MemberOrderbyKeys>;
 

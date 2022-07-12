@@ -2,7 +2,7 @@ import * as yup from "yup";
 import * as express from "express";
 import { connect } from "../services/googleService";
 import { ResultWithStatusCode } from "../toolsServices/ErrorService";
-import * as searchService from "../toolsServices/searchService";
+import * as searchService from "../toolsServices/SearchService";
 import * as memberService from "../services/members";
 import { MemberSummary } from "../entities/members";
 
