@@ -6,12 +6,16 @@
         "node": "14.x"
     },
     "scripts": {
-        "start": "yarn ts-node src/index.ts",
+        "start": "nodemon  ./src/index.ts",
         "build": "tsc",
         "deploy": "git push heroku main",
         "postinstall": "tsc",
         "watch-node": "nodemon build/index.js",
-        "watch-ts": "tsc -w"
+        "watch-ts": "tsc -w",
+        "heroku-start": "yarn ts-node src/index.ts",
+        "lint": "eslint './src/**/*.ts'  --config .eslintrc.json --no-error-on-unmatched-pattern --ignore-path .gitignore ",
+        "lintfix": "yarn lint --fix",
+        "prettier": "prettier -w ."
     },
     "main": "index.ts",
     "dependencies": {

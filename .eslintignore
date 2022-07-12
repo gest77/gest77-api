@@ -1,0 +1,5 @@
+build/
+node_modules/
+prisma/*
+generated/
+src/resolvers/LinkRelations/*

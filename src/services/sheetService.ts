@@ -1,5 +1,3 @@
-import { GoogleSpreadsheet } from "google-spreadsheet";
-
 // ATTENTION : Il y a des noms de fonctions / fichiers qui portent à confusion.
 // inscrit / Preinscrit    2018 / 2019  sheet / spreadsheet ...
 

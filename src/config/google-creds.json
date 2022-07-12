@@ -1,11 +1,11 @@
 {
     "web": {
-        "client_id": "___383597878242-gfskb8qdlvf0ois1h8acd0m20g61th16.apps.googleusercontent.com",
-        "project_id": "__project-id-6231252080602742540",
+        "client_id": "383597878242-gfskb8qdlvf0ois1h8acd0m20g61th16.apps.googleusercontent.com",
+        "project_id": "project-id-6231252080602742540",
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret": "__GOCSPX-fDZS1N5gYJt3JWd2ZJT7PW3RNZZ2",
-        "redirect_uris": ["https://gest77-api.herokuapp.com/"]
+        "client_secret": "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",
+        "redirect_uris": ["https://gest77-api.herokuapp.com/google/redirect"]
     }
 }

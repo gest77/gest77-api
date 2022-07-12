@@ -7,6 +7,8 @@ export interface LocalContext extends Record<string, unknown> {
     jwtPayload: JwtPayload;
 }
 
+export type VeraLocals = LocalContext;
+
 declare module "jsonwebtoken" {
     export interface JwtPayload {
         memberId?: string;

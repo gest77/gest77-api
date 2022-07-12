@@ -1,7 +1,6 @@
 import "dotenv/config";
 import root from "app-root-path";
 import express from "express";
-import path from "path";
 import * as i18n from "i18n";
 import cors from "cors";
 import cookieParser from "cookie-parser";
