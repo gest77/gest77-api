@@ -24,7 +24,7 @@ exports.fullDocOptions = {
                 },
             },
         },
-        servers: [{ url: "http://api.gest.wassa-dev.com" }, { url: "http://localhost:3030" }], // { url: "preprod" }, { url: "prod" }
+        servers: [{ url: "https://gest77-api.herokuapp.com/" }, { url: "http://localhost:7700" }], // { url: "preprod" }, { url: "prod" }
     },
     apis: ["./src/**/*.swagger.ts", "./src/controllers/*.ts", "./src/services/*.ts"],
 };

@@ -15,6 +15,7 @@
     },
     "main": "index.ts",
     "dependencies": {
+        "@googleapis/docs": "^1.0.1",
         "@types/app-root-path": "^1.2.4",
         "@types/cookie-parser": "^1.4.3",
         "@types/cors": "^2.8.12",
@@ -37,6 +38,8 @@
         "eslint": "^8.19.0",
         "express": "^4.15.2",
         "express-fileupload": "^1.4.0",
+        "google-spreadsheet": "^3.3.0",
+        "googleapis": "^105.0.0",
         "got": "^11.3.0",
         "i18n": "^0.15.0",
         "jsonwebtoken": "^8.5.1",
@@ -66,5 +69,8 @@
         "heroku",
         "express"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "@types/google-spreadsheet": "^3.3.0"
+    }
 }
