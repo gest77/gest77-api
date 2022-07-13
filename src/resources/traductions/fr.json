@@ -16,14 +16,6 @@
         "unauthorized": "Vous n'êtes pas autorisés à effectuer cette action",
         "invalid_credentials": "Login / Mot de passe invalides",
         "not_found": "Ressource introuvable",
-        "prisma": {
-            "unknown": "Un erreur inconue s'est produite dans prisma",
-            "unable_to_create": "Un erreur prisma s'est produite, impossible de créer l'entrée",
-            "unable_to_find_existing": "Impossible de trouver l'entrée unique dans la table",
-            "unable_to_get": "Impossible d'obtenir l'entrée",
-            "unable_to_update": "Impossible de mettre à jour l'entrée",
-            "unable_to_delete": "Impossible de supprimer l'entrée"
-        },
         "user": {
             "already_exists": "Un utilisateur avec le mail {{email}} existe déjà. Merci de renseigner un nouveau mail.",
             "not_found_with_email": "L'utilisateur ayant pour email {{email}} n'existe pas",
@@ -37,25 +29,14 @@
             "wrong_invite_code": "Ce code d'invitation n'est pas associé à cette adresse mail",
             "not_invited": "Le compte {{email}} n'a pas été invité sur l'application"
         },
-        "clothe": {
-            "not_my_clothe": "Ce vêtement ne vous appartient pas",
-            "basic_not_updatable": "Les vêtements basiques ne sont pas éditables",
-            "already_shared": "Le vêtement est déjà en prêt a cet.te ami.e",
-            "not_my_share": "Ce partage ne vous concerne pas",
-            "share_with_myself": "Impossible de partager avec soi-même"
-        },
+
         "server": {
             "initialization": "Erreur d'initialisaiton du serveur",
             "not_implemented": "Fonctionnalité non implementée",
             "deprecated": "Fonctionnalité dépréciée"
         }
     },
-    "thirdpart": {
-        "vuetag": {
-            "parse_emptytable": "Impossible de lire les données vuetag (tableau vide)",
-            "parse_enmptyentry": "Impossible de lire les données vuetag (une entrée vide)"
-        }
-    },
+
     "mail": {
         "subject": {
             "forgot_password": "VERA - Mot de passe oublié",
@@ -65,11 +46,5 @@
             "user_share_with_me": "VERA - Un ami a partagé un vêtement avec vous",
             "waiter_app_creation": "mail.subject.waiter_app_creation"
         }
-    },
-    "filters": {
-        "createdbefore must be a `date` type, but the final value was": " `Invalid Date` (cast from the value `\"rom\"`)."
-    },
-    "orderby[0]": {
-        "key must be one of the following values": " createdaAt, title, category, drawer, colorIndex, properties, labels, chosenCount"
     }
 }

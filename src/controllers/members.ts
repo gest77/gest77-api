@@ -44,7 +44,7 @@ const GetMembersFilterSchema = yup
         title: yup.string(),
         firstname: yup.string(),
         lastname: yup.string(),
-        birth: yup.date(),
+        birth: yup.string().matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}/), // no date !
     })
     .noUnknown(true)
     .strict();
@@ -92,7 +92,9 @@ export const search = async (req: express.Request): Promise<ResultWithStatusCode
     const { filters, pagination, orderby } = searchService.parseFiltersInQuery(req); // might throw badRequest
     const input = await searchMembersInputSchema.validate({ filters, pagination, orderby }, { stripUnknown: true, abortEarly: false });
 
+    console.log("member filter " + JSON.stringify(input, null, 2));
+
     const client = connect();
 
-    return { statusCode: 200, result: await memberService.getMembers(client, input) };
+    return { statusCode: 200, result: await memberService.getMembersCurrentYear(client, input) };
 };

@@ -13,14 +13,7 @@
         "invalid_credentials": "Invalid email or password",
         "not_found": "Resource not found",
         "reset_password": "You should update your password before to use this application",
-        "prisma": {
-            "unknown": "An unkonwn error fires in prisma",
-            "unable_to_create": "Prisma error, unable to create record",
-            "unable_to_find_existing": "Prisma error, unable to find record",
-            "unable_to_get": "errors.prisma.unable_to_get",
-            "unable_to_update": "errors.prisma.unable_to_update",
-            "unable_to_delete": "errors.prisma.unable_to_delete"
-        },
+
         "user": {
             "already_exists": "A user with {{email}} already exists",
             "not_found_with_email": "user with email {{email}} does not exist",
@@ -36,17 +29,7 @@
             "not_implemented": "errors.server.not_implemented",
             "deprecated": "errors.server.deprecated"
         },
-        "unknown": "errors.unknown",
-        "clothe": {
-            "not_my_clothe": "errors.clothe.not_my_clothe",
-            "basic_not_updatable": "errors.clothe.basic_not_updatable"
-        }
-    },
-    "thirdpart": {
-        "vuetag": {
-            "parse_emptytable": "Impossible to parse vuetag data, empty data (empty table)",
-            "parse_enmptyentry": "Impossible to parse vuetag data, empty data entry (1 empty entry)"
-        }
+        "unknown": "errors.unknown"
     },
     "subject": {
         "forgot_password": "mail.subject.forgot_password",
