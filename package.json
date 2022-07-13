@@ -7,9 +7,9 @@
     },
     "scripts": {
         "start": "nodemon  ./src/index.ts",
-        "build": "tsc",
+        "build": "tsc && mkdir -p build/resources/traductions && cp ./src/resources/traductions/* build/resources/traductions && mkdir -p build/config && cp ./src/config/swagger.readme.md build/config/swagger.readme.md && mkdir -p uploads",
         "deploy": "git push heroku $(git branch --show-current):main",
-        "postinstall": "tsc",
+        "postinstall": "yarn build",
         "watch-node": "nodemon build/index.js",
         "watch-ts": "tsc -w",
         "heroku-start": "yarn ts-node --optimize_for_size --max_old_space_size=460 src/index.ts",
