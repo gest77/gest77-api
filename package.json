@@ -8,7 +8,7 @@
     "scripts": {
         "start": "nodemon  ./src/index.ts",
         "build": "tsc",
-        "deploy": "git push heroku main",
+        "deploy": "git push heroku $(git branch --show-current):main",
         "postinstall": "tsc",
         "watch-node": "nodemon build/index.js",
         "watch-ts": "tsc -w",
