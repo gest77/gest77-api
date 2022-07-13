@@ -1,5 +1,5 @@
 import * as express from "express";
-import { manageRedirect } from "../services/googleService";
+import { manageRedirect } from "../services/google";
 import { ResultWithStatusCode } from "../toolsServices/ErrorService";
 
 export const redirect = async (req: express.Request): Promise<ResultWithStatusCode<void>> => {

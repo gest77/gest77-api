@@ -11,10 +11,6 @@ export type VeraLocals = LocalContext;
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
-        memberId?: string;
-        email: string;
-        auth?: boolean;
-        refresh?: boolean;
-        resetPassword: boolean;
+        dummy: string;
     }
 }

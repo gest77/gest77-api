@@ -1,4 +1,4 @@
-import { SPREADSHEET_ID_INSCRITS_2021 } from "./sheetService";
+import { SPREADSHEET_ID_INSCRITS_2021 } from "./sheet";
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
 import { MemberSummary } from "../entities/members";
