@@ -11,3 +11,6 @@ build
 # Docker
 Dockerfile
 docker-compose.yml
+
+#logs
+gest.api.log
