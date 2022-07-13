@@ -15,9 +15,7 @@ const TOKEN_PATH = "googleapitoken.json";
 // Load client secrets from a local file.
 
 const getLocalToken = (): Credentials => {
-    console.log("localtoken before read");
     const token = fs.readFileSync(TOKEN_PATH).toString();
-    console.log("localtoken = " + token);
     return JSON.parse(token) as Credentials;
 };
 

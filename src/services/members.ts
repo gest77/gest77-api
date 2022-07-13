@@ -1,7 +1,8 @@
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
-import { InscritSheet, MemberSummary } from "../entities/members";
-import { SearchInput, buildPaginateResponse, PaginatedResponse } from "../toolsServices/SearchService";
+import { InscritSheetProperties } from "../entities/memberSheets";
+import { Creneau, MemberSummary } from "../entities/members";
+import { SearchInput, buildPaginateResponse, PaginatedResponse, preparePaginationFilters } from "../toolsServices/SearchService";
 
 export type SearchMembersInput = SearchInput<SearchMembersFilter, MemberOrderbyKeys>;
 
@@ -9,6 +10,7 @@ export type SearchMembersFilter = {
     firstname?: string;
     lastname?: string;
     birth?: string;
+    creneau?: Creneau;
 };
 
 export const MemberOrderbyKeysNames = ["lastname"] as const;
@@ -24,13 +26,12 @@ export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMe
     //         get(params?: Params$Resource$Spreadsheets$Values$Get, options?: MethodOptions): GaxiosPromise<Schema$ValueRange>;
     let members = new Array<MemberSummary>();
     let membersTotal = 0; // all result count to get number of pages.
-    //const { take, skip } = preparePaginationFilters(input?.pagination);
 
-    const sheetProperties = InscritSheet["2021"];
+    const sheetProperties = InscritSheetProperties["2021"];
 
     const res = await sheets.spreadsheets.values.get({
-        spreadsheetId: sheetProperties.spreadsheetId,
-        range: sheetProperties.range,
+        spreadsheetId: sheetProperties.inscritSpreadsheetId,
+        range: sheetProperties.inscritSheetName + sheetProperties.range,
     });
 
     const rows = res.data.values;
@@ -42,6 +43,7 @@ export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMe
             firstname: row[sheetProperties.index["firstname"]],
             lastname: row[sheetProperties.index["lastname"]],
             birth: row[sheetProperties.index["birthDate"]],
+            creneau: row[sheetProperties.index["creneau"]],
         });
 
     if (input?.filters?.firstname) {
@@ -55,7 +57,14 @@ export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMe
     if (input?.filters?.birth) {
         members = members.filter((member) => member.birth.toUpperCase() === input?.filters?.birth);
     }
+    if (input?.filters?.creneau) {
+        members = members.filter((member) => member.creneau === input?.filters?.creneau);
+    }
     membersTotal = members.length;
 
+    if (input?.pagination) {
+        const { skip, end } = preparePaginationFilters(input?.pagination);
+        members = members.slice(skip, end);
+    }
     return buildPaginateResponse(members, membersTotal, input?.pagination);
 };

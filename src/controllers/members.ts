@@ -4,7 +4,7 @@ import { connect } from "../services/google";
 import { ResultWithStatusCode } from "../toolsServices/ErrorService";
 import * as searchService from "../toolsServices/SearchService";
 import * as memberService from "../services/members";
-import { MemberSummary } from "../entities/members";
+import { Creneau, CreneauNames, MemberSummary } from "../entities/members";
 
 /** GetMembersFilter - swagger
  * @swagger
@@ -41,10 +41,10 @@ import { MemberSummary } from "../entities/members";
  */
 const GetMembersFilterSchema = yup
     .object({
-        title: yup.string(),
         firstname: yup.string(),
         lastname: yup.string(),
         birth: yup.string().matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}/), // no date !
+        creneau: yup.mixed<Creneau>().oneOf(Object.values(CreneauNames)),
     })
     .noUnknown(true)
     .strict();

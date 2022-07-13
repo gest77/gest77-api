@@ -33,16 +33,17 @@ export const PaginationInputSchema = yup
     })
     .noUnknown(true);
 
-export const preparePaginationFilters = (input?: PaginationInput): { skip?: number; take?: number } => {
-    if (!input) return { skip: undefined, take: undefined };
+export const preparePaginationFilters = (input?: PaginationInput): { skip?: number; take?: number; end?: number } => {
+    if (!input) return { skip: undefined, take: undefined, end: undefined };
 
     if (!input.elementsPerPage) input.elementsPerPage = DEFAULT_ELEMENTS_PER_PAGE;
     if (!input.pageIndex) input.pageIndex = DEFAULT_PAGE_INDEX;
 
     const take = input.elementsPerPage;
     const skip = input.pageIndex * take;
+    const end = take + skip;
 
-    return { skip, take };
+    return { skip, take, end };
 };
 
 export interface PaginatedResponse<T> {
