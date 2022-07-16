@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
-import { InscritSheetProperties } from "../entities/memberSheets";
-import { Creneau, MemberSummary } from "../entities/members";
+import { AllYears, allSheetProperties } from "../entities/memberSheets";
+import { Creneau, Member, MemberSummary, parseMember, toMemberSummary } from "../entities/members";
 import { SearchInput, buildPaginateResponse, PaginatedResponse, preparePaginationFilters } from "../toolsServices/SearchService";
 
 export type SearchMembersInput = SearchInput<SearchMembersFilter, MemberOrderbyKeys>;
@@ -17,17 +17,20 @@ export const MemberOrderbyKeysNames = ["lastname"] as const;
 export type MemberOrderbyKeys = typeof MemberOrderbyKeysNames[number];
 
 /**
- * Prints the names of Liste des inscrits 2021 !
+ * Prints the names of Liste des inscrits !
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
  */
-export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMembersInput): Promise<PaginatedResponse<MemberSummary>> => {
-    // return;
+export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMembersInput, year?: AllYears): Promise<PaginatedResponse<MemberSummary>> => {
+    console.log("getMembersCurrentYear : " + year);
+
     const sheets = google.sheets({ version: "v4", auth });
     //         get(params?: Params$Resource$Spreadsheets$Values$Get, options?: MethodOptions): GaxiosPromise<Schema$ValueRange>;
-    let members = new Array<MemberSummary>();
+    //let members = new Array<MemberSummary>();
+    let members = new Array<Member>();
     let membersTotal = 0; // all result count to get number of pages.
 
-    const sheetProperties = InscritSheetProperties["2021"];
+    const currentYear = year || "2021";
+    const sheetProperties = allSheetProperties[currentYear];
 
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: sheetProperties.inscritSpreadsheetId,
@@ -38,13 +41,8 @@ export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMe
     if (!rows || !rows.length) {
         return buildPaginateResponse(members, membersTotal, input?.pagination);
     }
-    for (const row of rows)
-        members.push({
-            firstname: row[sheetProperties.index["firstname"]],
-            lastname: row[sheetProperties.index["lastname"]],
-            birth: row[sheetProperties.index["birthDate"]],
-            creneau: row[sheetProperties.index["creneau"]],
-        });
+    //for (const row of rows) members.push(toMemberSummary(parseMember(currentYear, row)));
+    for (const row of rows) members.push(parseMember(currentYear, row));
 
     if (input?.filters?.firstname) {
         const safeFirstname = input.filters?.firstname.toUpperCase();
@@ -55,7 +53,7 @@ export const getMembersCurrentYear = async (auth: OAuth2Client, input?: SearchMe
         members = members.filter((member) => member.lastname.toUpperCase() === safeLastname);
     }
     if (input?.filters?.birth) {
-        members = members.filter((member) => member.birth.toUpperCase() === input?.filters?.birth);
+        members = members.filter((member) => member.birthDate.toLocaleDateString("fr") === input?.filters?.birth);
     }
     if (input?.filters?.creneau) {
         members = members.filter((member) => member.creneau === input?.filters?.creneau);

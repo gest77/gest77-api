@@ -1,10 +1,11 @@
 import * as yup from "yup";
 import * as express from "express";
 import { connect } from "../services/google";
-import { ResultWithStatusCode } from "../toolsServices/ErrorService";
+import { badRequest, ResultWithStatusCode } from "../toolsServices/ErrorService";
 import * as searchService from "../toolsServices/SearchService";
 import * as memberService from "../services/members";
 import { Creneau, CreneauNames, MemberSummary } from "../entities/members";
+import { AllYears as AllYears } from "../entities/memberSheets";
 
 /** GetMembersFilter - swagger
  * @swagger
@@ -85,16 +86,25 @@ export const searchMembersInputSchema = yup
         filters: GetMembersFilterSchema.notRequired(),
         pagination: searchService.PaginationInputSchema.notRequired().strict(true), // strict true is important it allow to be undefined while pagination.pagIndex is required. Else we get a default value.
         orderby: MemberOrderBySchema.notRequired(),
+        year: yup.mixed<AllYears>().oneOf(Object.values(AllYears)),
     })
     .noUnknown(true);
 
 export const search = async (req: express.Request): Promise<ResultWithStatusCode<searchService.PaginatedResponse<MemberSummary>>> => {
+    console.log("controller req.params.year : " + req.params.year);
     const { filters, pagination, orderby } = searchService.parseFiltersInQuery(req); // might throw badRequest
-    const input = await searchMembersInputSchema.validate({ filters, pagination, orderby }, { stripUnknown: true, abortEarly: false });
+    let year;
+
+    try {
+        year = req.params.year ? (req.params.year as AllYears) : undefined;
+    } catch (e) {
+        throw badRequest("validation.invalid", null, { invalid: "year" });
+    }
+    const input = await searchMembersInputSchema.validate({ filters, pagination, orderby, year }, { stripUnknown: true, abortEarly: false });
 
     console.log("member filter " + JSON.stringify(input, null, 2));
 
     const client = connect();
 
-    return { statusCode: 200, result: await memberService.getMembersCurrentYear(client, input) };
+    return { statusCode: 200, result: await memberService.getMembersCurrentYear(client, input, year) };
 };

@@ -1,4 +1,10 @@
+export const AllYears = ["2018", "2019", "2020", "2021", "2022"] as const;
+export type AllYears = typeof AllYears[number];
+
 //#region list of Member properties, corresponding to sheet columns. SAME ORDER !
+type Writable<T> = {
+    -readonly [K in keyof T]: T[K];
+};
 
 export const MemberProperties2022Names = [
     "isInscrit",
@@ -37,6 +43,7 @@ export const MemberProperties2022Names = [
     "ffmeDemandDate",
     "ffmeNumber",
 ] as const;
+export const WritableMemberProperties2022Names = MemberProperties2022Names as Writable<typeof MemberProperties2022Names>;
 export type MemberProperties2022 = typeof MemberProperties2022Names[number];
 
 export const MemberProperties2021Names = [
@@ -76,6 +83,7 @@ export const MemberProperties2021Names = [
     "ffmeDemandDate",
     "ffmeNumber",
 ] as const;
+export const WritableMemberProperties2021Names = MemberProperties2021Names as Writable<typeof MemberProperties2021Names>;
 export type MemberProperties2021 = typeof MemberProperties2021Names[number];
 
 export const MemberProperties2020Names = [
@@ -120,6 +128,7 @@ export const MemberProperties2020Names = [
     "ffmeDemandDate",
     "ffmeNumber",
 ] as const;
+export const WritableMemberProperties2020Names = MemberProperties2020Names as Writable<typeof MemberProperties2020Names>;
 export type MemberProperties2020 = typeof MemberProperties2020Names[number];
 
 export const MemberProperties2019Names = [
@@ -164,6 +173,7 @@ export const MemberProperties2019Names = [
     "ffmeDemandDate",
     "ffmeNumber",
 ] as const;
+export const WritableMemberProperties2019Names = MemberProperties2019Names as Writable<typeof MemberProperties2019Names>;
 export type MemberProperties2019 = typeof MemberProperties2019Names[number];
 
 export const MemberProperties2018Names = [
@@ -207,9 +217,12 @@ export const MemberProperties2018Names = [
     "ffmeDemandDate",
     "ffmeNumber",
 ] as const;
+export const WritableMemberProperties2018Names = MemberProperties2018Names as Writable<typeof MemberProperties2018Names>;
 export type MemberProperties2018 = typeof MemberProperties2018Names[number];
 
 // #endregion
+
+//#region indexedProperties for all years. saying what column index of google sheet
 
 export type Index2018 = { [key in MemberProperties2018]: number };
 export type Index2019 = { [key in MemberProperties2019]: number };
@@ -219,54 +232,33 @@ export type Index2022 = { [key in MemberProperties2022]: number };
 
 export type Index = Index2018 | Index2019 | Index2020 | Index2021 | Index2022;
 
-const IndexedProperties2018 = ((): Index => {
-    const result: Partial<Index2018> = {};
+const buildIndexedProperties = <INDEX_YEAR, K extends keyof INDEX_YEAR>(names: Array<K>): Index => {
+    const result: { [k in K]?: number } = {};
     let i = 0;
-    for (const key of MemberProperties2018Names) result[key] = i++;
-    return result as Index2018;
-})();
-const IndexedProperties2019 = ((): Index => {
-    const result: Partial<Index2019> = {};
-    let i = 0;
-    for (const key of MemberProperties2019Names) result[key] = i++;
-    return result as Index2019;
-})();
-const IndexedProperties2020 = ((): Index => {
-    const result: Partial<Index2020> = {};
-    let i = 0;
-    for (const key of MemberProperties2020Names) result[key] = i++;
-    return result as Index2020;
-})();
-const IndexedProperties2021 = ((): Index => {
-    const result: Partial<Index2021> = {};
-    let i = 0;
-    for (const key of MemberProperties2021Names) result[key] = i++;
-    return result as Index2021;
-})();
-const IndexedProperties2022 = ((): Index => {
-    const result: Partial<Index2022> = {};
-    let i = 0;
-    for (const key of MemberProperties2022Names) result[key] = i++;
-    return result as Index2022;
-})();
+    for (const key of names) result[key] = i++;
+    return result as Index;
+};
 
-export const allYears = ["2018", "2019", "2020", "2021", "2022"] as const;
-export type allYears = typeof allYears[number];
+const IndexedProperties2018: Index = buildIndexedProperties<Index2018, keyof Index2018>(WritableMemberProperties2018Names);
+const IndexedProperties2019: Index = buildIndexedProperties<Index2019, keyof Index2019>(WritableMemberProperties2019Names);
+const IndexedProperties2020: Index = buildIndexedProperties<Index2020, keyof Index2020>(WritableMemberProperties2020Names);
+const IndexedProperties2021: Index = buildIndexedProperties<Index2021, keyof Index2021>(WritableMemberProperties2021Names);
+const IndexedProperties2022: Index = buildIndexedProperties<Index2022, keyof Index2022>(WritableMemberProperties2022Names);
+
+//#endregion
 
 export type MemberSheetProps = {
     inscritSpreadsheetId: string;
     inscritSheetName: string;
-
     preInscritSpreadsheetId: string;
     preInscritSheetName: string;
     preInscritSummarySheetName: string;
-
     range: string;
     summaryRange: string;
     index: Index;
 };
 
-export const InscritSheetProperties: { [year in allYears]: MemberSheetProps } = {
+export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
     "2018": {
         inscritSpreadsheetId: "1nH6GwlCOI75WdwGLohSfTy5_8v9K0h0R9GImsAJsT24",
         inscritSheetName: "Inscrits 2018",
@@ -317,14 +309,4 @@ export const InscritSheetProperties: { [year in allYears]: MemberSheetProps } = 
         summaryRange: "!A1:H",
         index: IndexedProperties2022,
     },
-};
-
-export type IndexYear = { [year in allYears]: Index };
-
-export const fuckingYears: IndexYear = {
-    "2018": IndexedProperties2018,
-    "2019": IndexedProperties2019,
-    "2020": IndexedProperties2020,
-    "2021": IndexedProperties2021,
-    "2022": IndexedProperties2022,
 };

@@ -6,3 +6,4 @@ import { checkJwt } from "../middlewares/jwtChecker";
 export const memberRouter = Router();
 
 memberRouter.get("/", checkJwt(), catcher(memberController.search, "memberController.search"));
+memberRouter.get("/:year", checkJwt(), catcher(memberController.search, "memberController.search"));
