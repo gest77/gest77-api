@@ -80,6 +80,6 @@ export const catcher = (
         // If the current middleware function does not end the http request-response cycle,
         // it MUST call next() to pass control to the next middleware function.
         // Otherwise, the request will be left hanging.
-        //if (!res.headersSent) next();
+        // if (!res.headersSent) next();
     };
 };
