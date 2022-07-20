@@ -193,13 +193,14 @@ export const shouldResetPassword = <T>(): ErrorBody<T> => {
         message: __(errorId),
     };
 };
-export const notFoundError = <T>(): ErrorBody<T> => {
+export const notFoundError = <T>(details?: T): ErrorBody<T> => {
     const errorId = "errors.not_found";
     return {
         statusCode: 404,
         error: "Not Found",
         errorId,
         message: __(errorId),
+        details,
     };
 };
 export const notImplemented = <T>(details?: T): ErrorBody<T> => {
@@ -209,7 +210,7 @@ export const notImplemented = <T>(details?: T): ErrorBody<T> => {
         error: "Not implemented",
         errorId,
         message: __(errorId),
-        details: details,
+        details,
     };
 };
 export const deprecated = <T>(): ErrorBody<T> => {

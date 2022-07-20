@@ -4,7 +4,7 @@ import { connect } from "../services/google";
 import { badRequest, ResultWithStatusCode } from "../toolsServices/ErrorService";
 import * as searchService from "../toolsServices/SearchService";
 import * as memberService from "../services/members";
-import { Creneau, CreneauNames, MemberSummary } from "../entities/members";
+import { Creneau, CreneauNames, MemberId, MemberSummary } from "../entities/members";
 import { AllYears as AllYears } from "../entities/memberSheets";
 
 /** GetMembersFilter - swagger
@@ -44,7 +44,10 @@ const GetMembersFilterSchema = yup
     .object({
         firstname: yup.string(),
         lastname: yup.string(),
-        birth: yup.string().matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}/), // no date !
+        birthDate: yup
+            .string()
+            .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+            .notRequired(),
         creneau: yup.mixed<Creneau>().oneOf(Object.values(CreneauNames)),
     })
     .noUnknown(true)
@@ -91,20 +94,40 @@ export const searchMembersInputSchema = yup
     .noUnknown(true);
 
 export const search = async (req: express.Request): Promise<ResultWithStatusCode<searchService.PaginatedResponse<MemberSummary>>> => {
-    console.log("controller req.params.year : " + req.params.year);
     const { filters, pagination, orderby } = searchService.parseFiltersInQuery(req); // might throw badRequest
-    let year;
+    let year: AllYears;
 
     try {
-        year = req.params.year ? (req.params.year as AllYears) : undefined;
+        year = req.params.year ? (req.params.year as AllYears) : memberService.getCurrentSaisonYear();
     } catch (e) {
         throw badRequest("validation.invalid", null, { invalid: "year" });
     }
     const input = await searchMembersInputSchema.validate({ filters, pagination, orderby, year }, { stripUnknown: true, abortEarly: false });
 
-    console.log("member filter " + JSON.stringify(input, null, 2));
-
     const client = connect();
 
-    return { statusCode: 200, result: await memberService.getMembersCurrentYear(client, input, year) };
+    return { statusCode: 200, result: await memberService.searchMembers(client, year, "inscrit", "summary", input) };
+};
+
+export const parseMemberIdInQuery = (req: express.Request): MemberId => {
+    const firstname = req.query.firstname ? (req.query.firstname as string) : undefined;
+    if (!firstname) throw badRequest("validation.invalid", null, { invalid: "firstname" });
+
+    const lastname = req.query.lastname ? (req.query.lastname as string) : undefined;
+    if (!lastname) throw badRequest("validation.invalid", null, { invalid: "lastname" });
+
+    const birthDate = req.query.birthDate ? (req.query.birthDate as string) : undefined;
+    if (!birthDate) throw badRequest("validation.invalid", null, { invalid: "birthDate" });
+
+    return { firstname, lastname, birthDate };
+};
+
+export const findme = async (req: express.Request): Promise<ResultWithStatusCode<memberService.FindMeOutput>> => {
+    const year: AllYears = memberService.getCurrentSaisonYear();
+    const memberid = parseMemberIdInQuery(req); // might throw badRequest
+    // create filter with this :
+    const input = await searchMembersInputSchema.validate({ filters: memberid, year }, { stripUnknown: true, abortEarly: false });
+    const client = connect();
+
+    return { statusCode: 200, result: await memberService.findMe(client, year, input) };
 };

@@ -38,6 +38,10 @@ export const AgeLevelName = ["6-", "7-11", "12-14", "15-19", "20-24", "25-39", "
 export type AgeLevel = typeof AgeLevelName[number];
 // member have all fields from all years.
 
+export type MemberType = "inscrit" | "preinscrit";
+export type MemberResponseType = "full" | "summary";
+
+// Complete member has all fields that has ever existed at a time. including fileds that have became obsolete
 type CompleteMember = {
     isInscrit: boolean;
     dossierComplet: boolean;
@@ -45,7 +49,7 @@ type CompleteMember = {
     id: string;
     lastname: string;
     firstname: string;
-    birthDate: Date; // check
+    birthDate: string; // check
     inscriptionDate: Date;
     certificatDate: Date;
     doctor: string;
@@ -86,8 +90,16 @@ type CompleteMember = {
 const PickerMemberSummaryNames = ["firstname", "lastname", "birthDate", "creneau"] as const;
 type PickerMemberSummary = typeof PickerMemberSummaryNames[number];
 
-export type MemberSummary = Pick<CompleteMember, PickerMemberSummary>;
+const PickerMemberIdNames = ["firstname", "lastname", "birthDate"] as const;
+type PickerMemberId = typeof PickerMemberIdNames[number];
 
+const TechnicalFields = ["isInscrit", "dossierComplet", "isLicenceOK", "civilite", "age", "ageLevel"] as const;
+type TechnicalFields = typeof TechnicalFields[number];
+
+export type MemberSummary = Pick<CompleteMember, PickerMemberSummary>;
+export type MemberId = Pick<CompleteMember, PickerMemberId>;
+
+//type MemberX<K extends keyof CompleteMember> = Pick<CompleteMember, K>;
 type Member2018 = Pick<CompleteMember, MemberProperties2018>;
 type Member2019 = Pick<CompleteMember, MemberProperties2019>;
 type Member2020 = Pick<CompleteMember, MemberProperties2020>;
@@ -95,6 +107,7 @@ type Member2021 = Pick<CompleteMember, MemberProperties2021>;
 type Member2022 = Pick<CompleteMember, MemberProperties2022>;
 
 export type Member = Member2018 | Member2019 | Member2020 | Member2021 | Member2022;
+export type PublicMember = Omit<Member, TechnicalFields>;
 
 export const parseMember = (year: AllYears, row: Array<any>): Member => {
     return ParseMethods[year](row);
@@ -134,4 +147,11 @@ export const toMemberSummary = (member: Member): MemberSummary => {
         birthDate: member.birthDate,
         creneau: member.creneau,
     };
+};
+
+export const removeTechnicalFields = (member: Member): any => {
+    for (const key of TechnicalFields) {
+        if (member[key]) delete member[key];
+    }
+    return member;
 };

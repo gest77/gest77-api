@@ -16,6 +16,7 @@
         "unauthorized": "Vous n'êtes pas autorisés à effectuer cette action",
         "invalid_credentials": "Login / Mot de passe invalides",
         "not_found": "Ressource introuvable",
+        "too_many_result": "Trop de résultats de recherche",
         "user": {
             "already_exists": "Un utilisateur avec le mail {{email}} existe déjà. Merci de renseigner un nouveau mail.",
             "not_found_with_email": "L'utilisateur ayant pour email {{email}} n'existe pas",
@@ -29,14 +30,12 @@
             "wrong_invite_code": "Ce code d'invitation n'est pas associé à cette adresse mail",
             "not_invited": "Le compte {{email}} n'a pas été invité sur l'application"
         },
-
         "server": {
             "initialization": "Erreur d'initialisaiton du serveur",
             "not_implemented": "Fonctionnalité non implementée",
             "deprecated": "Fonctionnalité dépréciée"
         }
     },
-
     "mail": {
         "subject": {
             "forgot_password": "VERA - Mot de passe oublié",

@@ -1,5 +1,6 @@
 export const AllYears = ["2018", "2019", "2020", "2021", "2022"] as const;
 export type AllYears = typeof AllYears[number];
+export const minYear: AllYears = "2018";
 
 //#region list of Member properties, corresponding to sheet columns. SAME ORDER !
 type Writable<T> = {
@@ -222,6 +223,8 @@ export type MemberProperties2018 = typeof MemberProperties2018Names[number];
 
 // #endregion
 
+//#region list of Member properties, corresponding to sheet columns. SAME ORDER !
+
 //#region indexedProperties for all years. saying what column index of google sheet
 
 export type Index2018 = { [key in MemberProperties2018]: number };
@@ -238,6 +241,14 @@ const buildIndexedProperties = <INDEX_YEAR, K extends keyof INDEX_YEAR>(names: A
     for (const key of names) result[key] = i++;
     return result as Index;
 };
+
+const buildIndexedProperties_2 = <INDEX_YEAR, K extends keyof INDEX_YEAR>(names: ReadonlyArray<K>): Index => {
+    const result: { [k in K]?: number } = {};
+    let i = 0;
+    for (const key of names) result[key] = i++;
+    return result as Index;
+};
+const IndexedProperties2018_2: Index = buildIndexedProperties_2<Index2018, keyof Index2018>(MemberProperties2018Names);
 
 const IndexedProperties2018: Index = buildIndexedProperties<Index2018, keyof Index2018>(WritableMemberProperties2018Names);
 const IndexedProperties2019: Index = buildIndexedProperties<Index2019, keyof Index2019>(WritableMemberProperties2019Names);
@@ -299,10 +310,22 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         summaryRange: "!A1:H",
         index: IndexedProperties2021,
     },
+    // prod
+    // "2022": {
+    //     inscritSpreadsheetId: "1zrsDnWthihdIAPpYffTa3WbIzq90AskoVDusEWPeG4w",
+    //     inscritSheetName: "Inscrits",
+    //     preInscritSpreadsheetId: "1CW2tYVbG1iLQ-TDFrtSwQ2sqfNipIV23hpcdsN3ofac",
+    //     preInscritSheetName: "Preinscrits",
+    //     preInscritSummarySheetName: "Summary",
+    //     range: "!A2:AI",
+    //     summaryRange: "!A1:H",
+    //     index: IndexedProperties2022,
+    // },
+    // preprod
     "2022": {
-        inscritSpreadsheetId: "1zrsDnWthihdIAPpYffTa3WbIzq90AskoVDusEWPeG4w",
+        inscritSpreadsheetId: "1ZKRpGZkIkiyxLMLBONRd2WKm5PoEYZDb9i7DFYYEgnw",
         inscritSheetName: "Inscrits",
-        preInscritSpreadsheetId: "1CW2tYVbG1iLQ-TDFrtSwQ2sqfNipIV23hpcdsN3ofac",
+        preInscritSpreadsheetId: "1EYAAJDJyX5K8KBZAoqsjhMErz-kAELNrU3tp34wAoAk",
         preInscritSheetName: "Preinscrits",
         preInscritSummarySheetName: "Summary",
         range: "!A2:AI",
