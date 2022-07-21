@@ -1,0 +1,44 @@
+{
+    "mode": ["reinscription"],
+
+    "idmember": ["61470034-78d0-46e8-982f-4b306e53001e"],
+    "lastname": ["TAILLANDIER"],
+    "firstname": ["Romain"],
+    "birthdate": ["1978-12-06"],
+    "medicaldate": ["2021-09-13"],
+    "nommedecin": ["ISABELLE ROUX"],
+
+    "scancertif": [""],
+    "scancertifFilename": [""],
+    "scancertifData": [""],
+    "scancertifContent": ["", ""],
+    "scancertifMimetype": [""],
+    "previousscancertif": ["https://docs.google.com/file/d/1ValhlBgsl19rorws82eHxhxMMfONWs0O/preview?usp=drivesdk"],
+
+    "civilite": ["Mr"],
+
+    "inputTOTAL": ["120"],
+    "inputtarif": ["120"],
+    "payment": ["Paiement par Hello Asso"],
+
+    "scanphoto": [""],
+    "scanphotoMimetype": [""],
+    "scanphotoContent": [""],
+    "scanphotoFilename": [""],
+    "scanphotoData": [""],
+    "previousscanphoto": ["https://docs.google.com/file/d/14c5BpFnyUlhkV3nDpolLFNd_XCswl-Ao/preview?usp=drivesdk"],
+
+    "address": ["56 rue THEODORE HONORE"],
+    "zipcode": ["94130"],
+    "city": ["NOGENT SUR MARNE"],
+    "cellphone": ["06 26 40 65 36"],
+    "receiveSMS": ["on"],
+    "email": ["romaintaillandier@gmail.com"],
+    "receiveEmail": ["on"],
+    "niveau": ["Initiateur"],
+    "creneau": ["Adultes"],
+
+    "firstRegistration": ["08/03/2013"],
+    "fsgtNumber": ["518068"],
+    "ffmeNumber": [""]
+}

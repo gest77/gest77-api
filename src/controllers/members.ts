@@ -1,11 +1,28 @@
 import * as yup from "yup";
 import * as express from "express";
-import { connect } from "../services/google";
 import { badRequest, ResultWithStatusCode } from "../toolsServices/ErrorService";
 import * as searchService from "../toolsServices/SearchService";
 import * as memberService from "../services/members";
-import { Creneau, CreneauNames, MemberId, MemberSummary } from "../entities/members";
+import {
+    ClimbLevel,
+    ClimbLevelNames,
+    Creneau,
+    CreneauNames,
+    LicenceRemark,
+    LicenceRemarkNames,
+    MemberId,
+    MemberSummary,
+    ModePaiement,
+    ModePaiementNames,
+    Sex,
+    SexNames,
+    TarifType,
+    TarifTypeNames,
+} from "../entities/members";
 import { AllYears as AllYears } from "../entities/memberSheets";
+
+const frenchDateRegex = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
+const inputCellPhoneRegex = /^(0[67][0-9]{8}$)|(^0[67]( [0-9][0-9]){4}$)/;
 
 /** GetMembersFilter - swagger
  * @swagger
@@ -44,10 +61,7 @@ const GetMembersFilterSchema = yup
     .object({
         firstname: yup.string(),
         lastname: yup.string(),
-        birthDate: yup
-            .string()
-            .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
-            .notRequired(),
+        birthDate: yup.string().matches(frenchDateRegex).notRequired(),
         creneau: yup.mixed<Creneau>().oneOf(Object.values(CreneauNames)),
     })
     .noUnknown(true)
@@ -104,9 +118,7 @@ export const search = async (req: express.Request): Promise<ResultWithStatusCode
     }
     const input = await searchMembersInputSchema.validate({ filters, pagination, orderby, year }, { stripUnknown: true, abortEarly: false });
 
-    const client = connect();
-
-    return { statusCode: 200, result: await memberService.searchMembers(client, year, "inscrit", "summary", input) };
+    return { statusCode: 200, result: await memberService.searchMembers(year, "inscrit", "summary", input) };
 };
 
 export const parseMemberIdInQuery = (req: express.Request): MemberId => {
@@ -127,7 +139,45 @@ export const findme = async (req: express.Request): Promise<ResultWithStatusCode
     const memberid = parseMemberIdInQuery(req); // might throw badRequest
     // create filter with this :
     const input = await searchMembersInputSchema.validate({ filters: memberid, year }, { stripUnknown: true, abortEarly: false });
-    const client = connect();
 
-    return { statusCode: 200, result: await memberService.findMe(client, year, input) };
+    return { statusCode: 200, result: await memberService.findMe(year, input) };
+};
+
+export const PreregisterInputSchema = yup
+    .object()
+    .shape({
+        id: yup.string(),
+        lastname: yup.string().required("validation.required"),
+        firstname: yup.string().required("validation.required"),
+        birthDate: yup.string().matches(frenchDateRegex).required("validation.required"),
+        certificatDate: yup.string().matches(frenchDateRegex).required("validation.required"),
+        doctor: yup.string().required("validation.required"),
+        //scanCertif: string,
+        tarif: yup.number().required("validation.required"),
+        modepaiement: yup.mixed<ModePaiement>().oneOf(Object.values(ModePaiementNames)).required("validation.required"),
+        //photo: string,
+        sex: yup.mixed<Sex>().oneOf(Object.values(SexNames)).required("validation.required"),
+        addresse: yup.string().required("validation.required"),
+        zipCode: yup.string().required("validation.required"),
+        city: yup.string().required("validation.required"),
+        cellPhone: yup.string().matches(inputCellPhoneRegex).required("validation.required"),
+        receiveSMS: yup.boolean().required("validation.required"),
+        whatsapp: yup.boolean().required("validation.required"),
+        email: yup.string().required("validation.required"),
+        receiveEmails: yup.boolean().required("validation.required"),
+        climbLevel: yup.mixed<ClimbLevel>().oneOf(Object.values(ClimbLevelNames)).required("validation.required"),
+        creneau: yup.mixed<Creneau>().oneOf(Object.values(CreneauNames)).required("validation.required"),
+        tarifType: yup.mixed<TarifType>().oneOf(Object.values(TarifTypeNames)).required("validation.required"),
+        dateFirstInscription: yup.string().required("validation.required"),
+        licenceRemark: yup.mixed<LicenceRemark>().oneOf(Object.values(LicenceRemarkNames)).required("validation.required"),
+        fsgtNumber: yup.string(),
+        ffmeNumber: yup.string(),
+    })
+    .noUnknown(true);
+
+export const preregister = async (req: express.Request): Promise<ResultWithStatusCode<void>> => {
+    // create filter with this :
+    const input = await PreregisterInputSchema.validate(req.body, { stripUnknown: true, abortEarly: false });
+
+    return { statusCode: 201, result: await memberService.preregister(input) };
 };

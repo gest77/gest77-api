@@ -264,9 +264,11 @@ export type MemberSheetProps = {
     preInscritSpreadsheetId: string;
     preInscritSheetName: string;
     preInscritSummarySheetName: string;
-    range: string;
+    membersRange: string;
+    memberRange: (index: number) => string;
+    headerRange: string;
     summaryRange: string;
-    index: Index;
+    props: Index;
 };
 
 export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
@@ -276,9 +278,13 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         preInscritSpreadsheetId: "",
         preInscritSheetName: "",
         preInscritSummarySheetName: "",
-        range: "!A2:AM",
+        membersRange: "!A2:AM",
+        memberRange: (index: number): string => {
+            return "!A" + index + ":AM" + index;
+        },
+        headerRange: "!A1:AM1",
         summaryRange: "",
-        index: IndexedProperties2018,
+        props: IndexedProperties2018,
     },
     "2019": {
         inscritSpreadsheetId: "1eenzFOUEF68Ro2_jCxKG-HQrbimyHEAblGMSpmpnDSA",
@@ -286,9 +292,13 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         preInscritSpreadsheetId: "1xNMvl3GLoPQia7L8-2yeXAyBWaRqLefsvNHsInboiWs",
         preInscritSheetName: "Preinscrits 2019",
         preInscritSummarySheetName: "Summary 2019",
-        range: "!A2:AN",
+        membersRange: "!A2:AN",
+        memberRange: (index: number): string => {
+            return "!A" + index + ":AN" + index;
+        },
+        headerRange: "!A1:AN1",
         summaryRange: "!A1:H",
-        index: IndexedProperties2019,
+        props: IndexedProperties2019,
     },
     "2020": {
         inscritSpreadsheetId: "1iVQctHyZ3vVBMzCXdaPUTgQuOwuTkBACG2hSjj6oEi0",
@@ -296,9 +306,13 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         preInscritSpreadsheetId: "1ut7t9avg9axGHu9ScqYD66-LqMkBELnJxudXOsLFeZU",
         preInscritSheetName: "Preinscrits 2020",
         preInscritSummarySheetName: "Summary 2020",
-        range: "!A2:AN",
+        membersRange: "!A2:AN",
+        memberRange: (index: number): string => {
+            return "!A" + index + ":AN" + index;
+        },
+        headerRange: "!A1:AN1",
         summaryRange: "!A1:H",
-        index: IndexedProperties2020,
+        props: IndexedProperties2020,
     },
     "2021": {
         inscritSpreadsheetId: "1Zq3Cfl9o2kNqw57Rsgn1qBIum9zjpVcs47j0oYHyj8g",
@@ -306,9 +320,13 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         preInscritSpreadsheetId: "1JRK701D3hEs7-CvPrBzGVU2Yj8UH2JFSsv1g18xDNyU",
         preInscritSheetName: "Preinscrits 2021",
         preInscritSummarySheetName: "Summary 2021",
-        range: "!A2:AI",
+        membersRange: "!A2:AI",
+        memberRange: (index: number): string => {
+            return "!A" + index + ":AI" + index;
+        },
+        headerRange: "!A1:AI1",
         summaryRange: "!A1:H",
-        index: IndexedProperties2021,
+        props: IndexedProperties2021,
     },
     // prod
     // "2022": {
@@ -317,7 +335,9 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
     //     preInscritSpreadsheetId: "1CW2tYVbG1iLQ-TDFrtSwQ2sqfNipIV23hpcdsN3ofac",
     //     preInscritSheetName: "Preinscrits",
     //     preInscritSummarySheetName: "Summary",
-    //     range: "!A2:AI",
+    //     membersRange: "!A2:AI",
+    //     memberRange: (index:number):string => {return "!A" + index + ":AI" + index;},
+    //     headerRange: "!A1:AI1",
     //     summaryRange: "!A1:H",
     //     index: IndexedProperties2022,
     // },
@@ -328,8 +348,12 @@ export const allSheetProperties: { [year in AllYears]: MemberSheetProps } = {
         preInscritSpreadsheetId: "1EYAAJDJyX5K8KBZAoqsjhMErz-kAELNrU3tp34wAoAk",
         preInscritSheetName: "Preinscrits",
         preInscritSummarySheetName: "Summary",
-        range: "!A2:AI",
+        membersRange: "!A2:AI",
+        memberRange: (index: number): string => {
+            return "!A" + index + ":AI" + index;
+        },
+        headerRange: "!A1:AI1",
         summaryRange: "!A1:H",
-        index: IndexedProperties2022,
+        props: IndexedProperties2022,
     },
 };

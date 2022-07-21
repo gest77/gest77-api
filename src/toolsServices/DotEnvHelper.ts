@@ -21,13 +21,10 @@ export const crashIfEnvKO = (): void => {
 
 export const isLocalOrDev = (): boolean => {
     if (!process || !process.env || !process.env.NODE_ENV) {
-        console.log("isLocalOrDev false");
         return false;
     }
     if (process.env.NODE_ENV === "local" || process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev") {
-        console.log("isLocalOrDev true");
         return true;
     }
-    console.log("isLocalOrDev false");
     return false;
 };

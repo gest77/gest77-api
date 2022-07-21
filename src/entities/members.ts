@@ -16,11 +16,11 @@ import {
 export const CreneauNames = ["Famille", "Ecole", "Adultes"] as const;
 export type Creneau = typeof CreneauNames[number];
 
-export const TarifTypeNames = ["Réduit", "Bureau", "Ecole", "Accompagnateur", "Normal"] as const;
+export const TarifTypeNames = ["Réduit", "Bureau", "Ecole", "Accompagnateur", "Normal", "Libre"] as const;
 export type TarifType = typeof TarifTypeNames[number];
 
-export const licenceRemarkNames = ["Pas besoin de licences", "Besoin des deux licences", "Besoin FFME", "Besoin FSGT"] as const;
-export type LicenceRemark = typeof licenceRemarkNames[number];
+export const LicenceRemarkNames = ["Pas besoin de licences", "Besoin des deux licences", "Besoin FFME", "Besoin FSGT"] as const;
+export type LicenceRemark = typeof LicenceRemarkNames[number];
 
 export const SexNames = ["Masculin", "Féminin"] as const;
 export type Sex = typeof SexNames[number];
@@ -31,8 +31,8 @@ export type Civilite = typeof CiviliteNames[number];
 export const ModePaiementNames = ["Paiement par Hello Asso", "Paiement par chèque"] as const;
 export type ModePaiement = typeof ModePaiementNames[number];
 
-export const ClimbeLevelNames = ["Débutant", "Autonome", "Compétition", "Initiateur"] as const;
-export type ClimbLevel = typeof ClimbeLevelNames[number];
+export const ClimbLevelNames = ["Débutant", "Autonome", "Compétition", "Initiateur"] as const;
+export type ClimbLevel = typeof ClimbLevelNames[number];
 
 export const AgeLevelName = ["6-", "7-11", "12-14", "15-19", "20-24", "25-39", "40-44", "45-49", "50-54", "55-59", "60+"] as const;
 export type AgeLevel = typeof AgeLevelName[number];
@@ -41,17 +41,19 @@ export type AgeLevel = typeof AgeLevelName[number];
 export type MemberType = "inscrit" | "preinscrit";
 export type MemberResponseType = "full" | "summary";
 
+export type SheetFormula = string;
+
 // Complete member has all fields that has ever existed at a time. including fileds that have became obsolete
-type CompleteMember = {
-    isInscrit: boolean;
-    dossierComplet: boolean;
-    isLicenceOK: boolean;
+export type CompleteMember = {
+    isInscrit: 1;
+    dossierComplet: boolean | SheetFormula | 0 | 1;
+    isLicenceOK: boolean | SheetFormula | 0 | 1;
     id: string;
     lastname: string;
     firstname: string;
     birthDate: string; // check
-    inscriptionDate: Date;
-    certificatDate: Date;
+    inscriptionDate: string;
+    certificatDate: string;
     doctor: string;
     scanCertif: string;
     chequeValue: number;
@@ -69,21 +71,21 @@ type CompleteMember = {
     zipCode: string;
     city: string;
     cellPhone: string;
-    receiveSMS: boolean;
-    whatsapp: boolean;
+    receiveSMS: boolean | 0 | 1;
+    whatsapp: boolean | 0 | 1;
     email: string;
     phone: string;
-    receiveEmails: boolean;
-    age: number;
-    ageLevel: AgeLevel;
+    receiveEmails: boolean | 0 | 1;
+    age: number | SheetFormula;
+    ageLevel: AgeLevel | SheetFormula;
     climbLevel: ClimbLevel;
     creneau: Creneau;
     tarifType: TarifType;
-    dateFirstInscription: Date;
+    dateFirstInscription: string;
     licenceRemark: string;
-    fsgtDemandDate: Date;
+    fsgtDemandDate?: string;
     fsgtNumber: string;
-    ffmeDemandDate: Date;
+    ffmeDemandDate?: string;
     ffmeNumber: string;
 };
 
@@ -115,7 +117,7 @@ export const parseMember = (year: AllYears, row: Array<any>): Member => {
 
 const parseMemberX = <MEMBER_YEAR, K extends keyof MEMBER_YEAR>(year: AllYears, names: Array<K>, row: Array<any>): Member => {
     const partialMember: { [k in K]?: any } = {};
-    const index = allSheetProperties[year].index;
+    const index = allSheetProperties[year].props;
     for (const prop of names) {
         partialMember[prop] = row[(index as { [k in K]: number })[prop]];
     }
